@@ -1,9 +1,15 @@
 'use strict';
-const imgContainer = document.querySelector('div');
-let item1 = document.querySelector('div img:first-child');
-let item2 = document.querySelector('div img:nth-child(2)');
-let item3 = document.querySelector('div img:nth-child(3)');
+// const errorMessage = document.getElementById('h2');
+const listResults = document.getElementById('listResults');
+const viewResults = document.getElementById('results');
+const imgContainer = document.getElementById('container');
+let item1 = document.querySelector('section img:first-child');
+let item2 = document.querySelector('section img:nth-child(2)');
+let item3 = document.querySelector('section img:nth-child(3)');
 let choices = [];
+let clicks = 0;
+const clicksAllowed = 25;
+
 // Display 3 product images
 // Create a constructor function that has the following properties: Name of product, file path, times image has been shown
 // Create algorithm that will randomly generate 3 images and display them side-by-side-by-side
@@ -19,7 +25,7 @@ let choices = [];
 // Add a button with the text "view results"
 // Displayed product names should match the file name
 
-function Items(name, fileExtension = 'jpg') {
+function Items(name, fileExtension = 'jpeg') {
   this.name = name;
   this.src = `images/${name}.${fileExtension}`;
   this.likes = 0;
@@ -48,24 +54,55 @@ new Items('water-can');
 new Items('wine-glass');
 
 function randomChoice() {
-  return Math.floor(Math.random) * choices.length;
+  return Math.floor(Math.random() * choices.length);
 }
 
-function displayChoice() {
+function renderChoices() {
   let choice1 = randomChoice();
   let choice2 = randomChoice();
   let choice3 = randomChoice();
-  while (choice1 === choice2 || choice1 === choice3 || choice2 === choice3) {
-    choice2 === randomChoice();
-    choice3 === randomChoice();
-  }
+  //   while (choice1 === choice2 || choice1 === choice3 || choice2 === choice3) {
+  //     choice2 === randomChoice();
+  //     choice3 === randomChoice();
+  //   }
   item1.src = choices[choice1].src;
-  item1.alt = choices[choice1].alt;
+  item1.alt = choices[choice1].name;
   choices[choice1].views++;
   item2.src = choices[choice2].src;
-  item2.alt = choices[choice2].alt;
+  item2.alt = choices[choice2].name;
   choices[choice2].views++;
   item3.src = choices[choice3].src;
-  item3.alt = choices[choice3].alt;
+  item3.alt = choices[choice3].name;
   choices[choice3].views++;
 }
+
+function handleClick(e) {
+  if (e.target === imgContainer) {
+    alert('You must select an item');
+  }
+  clicks++;
+  let clickedChoice = e.target.alt;
+  for (let i = 0; i < choices.length; i++) {
+    if (clickedChoice === choices[i].name) {
+      choices[i].likes++;
+      break;
+    }
+  }
+  renderChoices();
+  if (clicks === clicksAllowed) {
+    imgContainer.removeEventListener('click', handleClick);
+    viewResults.addEventListener('click', handleResults);
+  }
+}
+
+function handleResults() {
+  for (let i = 0; i < choices.length; i++) {
+    let li = document.createElement('li');
+    li.textContent = `${choices[i].name} had ${choices[i].views} and was clicked ${choices[i].likes} times.`;
+    listResults.appendChild(li);
+  }
+}
+
+imgContainer.addEventListener('click', handleClick);
+
+renderChoices();
