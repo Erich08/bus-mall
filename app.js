@@ -1,7 +1,7 @@
 'use strict';
 // const errorMessage = document.getElementById('h2');
-const listResults = document.getElementById('listResults');
-const viewResults = document.getElementById('results');
+const listResults = document.querySelector('ul');
+const viewResults = document.querySelector('section + div');
 const imgContainer = document.getElementById('container');
 let item1 = document.querySelector('section img:first-child');
 let item2 = document.querySelector('section img:nth-child(2)');
@@ -65,6 +65,13 @@ function renderChoices() {
   //     choice2 === randomChoice();
   //     choice3 === randomChoice();
   //   }
+  if (choice1 === choice2) {
+    choice2 = randomChoice();
+  } else if (choice1 === choice3) {
+    choice3 = randomChoice();
+  } else if (choice2 === choice3) {
+    choice3 = randomChoice();
+  }
   item1.src = choices[choice1].src;
   item1.alt = choices[choice1].name;
   choices[choice1].views++;
@@ -92,13 +99,14 @@ function handleClick(e) {
   if (clicks === clicksAllowed) {
     imgContainer.removeEventListener('click', handleClick);
     viewResults.addEventListener('click', handleResults);
+    viewResults.className = 'clicks-allowed';
   }
 }
 
 function handleResults() {
   for (let i = 0; i < choices.length; i++) {
     let li = document.createElement('li');
-    li.textContent = `${choices[i].name} had ${choices[i].views} and was clicked ${choices[i].likes} times.`;
+    li.textContent = `${choices[i].name} had ${choices[i].views} view(s) and was clicked ${choices[i].likes} times.`;
     listResults.appendChild(li);
   }
 }

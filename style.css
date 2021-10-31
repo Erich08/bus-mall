@@ -17,7 +17,7 @@ header {
   flex-direction: row;
 }
 
-header ul li a {
+#bus {
   color: #f2d639;
 }
 
@@ -51,13 +51,29 @@ img {
   width: 300px;
   height: 375px;
   border: 5px solid transparent;
+  border-radius: 20px;
+  /* box-shadow: 3px 3px 3px 3px; */
+  margin: 10px;
 }
 
 img:hover {
   border: 5px solid #f2f4f7;
 }
 
-#results {
+.results {
+  border: 1px solid black;
+  width: 14%;
+  padding: 11px;
+  text-align: center;
+  margin-top: 0.5rem;
+  background-color: #a0a0a0;
+  border-radius: 5px;
+  font-family: 'Exo 2', sans-serif;
+  pointer-events: none;
+  margin-left: 1rem;
+}
+
+section + div.clicks-allowed {
   border: 1px solid black;
   width: 14%;
   padding: 11px;
@@ -66,5 +82,20 @@ img:hover {
   background-color: #f2f4f7;
   border-radius: 5px;
   font-family: 'Exo 2', sans-serif;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+section + div.clicks-allowed:hover {
+  background-color: rgb(255, 255, 255);
+}
+
+div + ul li {
+  text-align: center;
+  font-family: 'Exo 2', sans-serif;
+  line-height: 1.75rem;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  word-spacing: 12px;
 }
