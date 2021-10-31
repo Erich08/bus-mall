@@ -61,17 +61,11 @@ function renderChoices() {
   let choice1 = randomChoice();
   let choice2 = randomChoice();
   let choice3 = randomChoice();
-  //   while (choice1 === choice2 || choice1 === choice3 || choice2 === choice3) {
-  //     choice2 === randomChoice();
-  //     choice3 === randomChoice();
-  //   }
-  if (choice1 === choice2) {
+  while (choice1 === choice2 || choice1 === choice3 || choice2 === choice3) {
     choice2 = randomChoice();
-  } else if (choice1 === choice3) {
-    choice3 = randomChoice();
-  } else if (choice2 === choice3) {
     choice3 = randomChoice();
   }
+
   item1.src = choices[choice1].src;
   item1.alt = choices[choice1].name;
   choices[choice1].views++;
