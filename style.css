@@ -61,7 +61,7 @@ img:hover {
   transform: scale(1.05);
 }
 
-.results {
+/* .results {
   border: 1px solid black;
   width: 14%;
   padding: 11px;
@@ -72,9 +72,9 @@ img:hover {
   font-family: 'Exo 2', sans-serif;
   pointer-events: none;
   margin-left: 1rem;
-}
+} */
 
-section + div.clicks-allowed {
+/* section + div.clicks-allowed {
   border: 1px solid black;
   width: 14%;
   padding: 11px;
@@ -100,4 +100,8 @@ div + ul li {
   font-size: 1.25rem;
   text-transform: uppercase;
   word-spacing: 12px;
+} */
+
+#myChart {
+  font-family: 'Exo 2', sans-serif;
 }
