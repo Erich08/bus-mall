@@ -1,7 +1,5 @@
 'use strict';
 const clicksAllowed = 25;
-const listResults = document.querySelector('ul');
-const viewResults = document.querySelector('section + div');
 const imgContainer = document.getElementById('container');
 let item1 = document.querySelector('section img:first-child');
 let item2 = document.querySelector('section img:nth-child(2)');
@@ -10,11 +8,17 @@ let choices = [];
 let clicks = 0;
 let uniqueNumbers = [];
 
+
+
 function Items(name, fileExtension = 'jpeg') {
   this.name = name;
   this.src = `images/${name}.${fileExtension}`;
   this.likes = 0;
   this.views = 0;
+  this.viewsLikes = JSON.parse(localStorage.getItem(this.name)) || {
+    views: [],
+    likes: []
+  };
   choices.push(this);
 }
 
@@ -38,10 +42,19 @@ new Items('unicorn');
 new Items('water-can');
 new Items('wine-glass');
 
+Items.prototype.storedData = function() {
+  this.viewsLikes.likes.push(this.likes);
+  this.viewsLikes.views.push(this.views);
+  localStorage.setItem(this.name, JSON.stringify(this.viewsLikes));
+}
+
+
+// Generates a random number between 0-18
 function randomChoice() {
   return Math.floor(Math.random() * choices.length);
 }
 
+// Produces 6, non-repeating, numbers to ensure the user doesn't see a duplicate item after each selection.
 function renderChoices() {
   while (uniqueNumbers.length < 6) {
     let rand = randomChoice();
@@ -49,7 +62,7 @@ function renderChoices() {
       uniqueNumbers.push(rand);
     }
   }
-  console.log(uniqueNumbers);
+  
   let choice1 = uniqueNumbers.shift();
   let choice2 = uniqueNumbers.shift();
   let choice3 = uniqueNumbers.shift();
@@ -80,32 +93,35 @@ function handleClick(e) {
   renderChoices();
   if (clicks === clicksAllowed) {
     imgContainer.removeEventListener('click', handleClick);
+    
+    for(let i = 0; i < choices.length; i++) {
+      choices[i].storedData();
+    }
     barGraph();
+    
   }
 }
 
-// function handleResults() {
-//   for (let i = 0; i < choices.length; i++) {
-//     let li = document.createElement('li');
-//     li.textContent = `${choices[i].name} had ${choices[i].views} view(s) and was clicked ${choices[i].likes} times.`;
-//     listResults.appendChild(li);
-//   }
-// }
-
-imgContainer.addEventListener('click', handleClick);
-
-renderChoices();
 
 function barGraph() {
   let productNames = [];
   let productViews = [];
   let productLikes = [];
   for (let i = 0; i < choices.length; i++) {
+    
     productNames.push(choices[i].name);
-    productViews.push(choices[i].views);
-    productLikes.push(choices[i].likes);
+    let likeSum = 0;
+    let viewsSum = 0;
+    for (let j = 0; j < choices[i].viewsLikes.likes.length; j++) {
+      likeSum += choices[i].viewsLikes.likes[j];
+      viewsSum += choices[i].viewsLikes.views[j];
+    }
+
+    productViews.push(viewsSum);
+    productLikes.push(likeSum);
   }
-  console.log(productNames);
+
+  
   const data = {
     labels: productNames,
     datasets: [
@@ -141,3 +157,10 @@ function barGraph() {
   let canvasChart = document.getElementById('myChart');
   const myChart = new Chart(canvasChart, config);
 }
+
+
+
+imgContainer.addEventListener('click', handleClick);
+
+renderChoices();
+
